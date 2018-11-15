@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Reflection;
 using AppKit;
 using Foundation;
 
@@ -11,6 +11,16 @@ namespace LiteDbExplorer.Mac
         {
         }
 
+        public override void ViewWillAppear ()
+        {
+            base.ViewWillAppear ();
+
+            var version = NSBundle.MainBundle.ObjectForInfoDictionary("CFBundleShortVersionString").ToString();
+
+            // Set Window Title
+            this.View.Window.Title = $"LiteDB Explorer {version}";
+        }
+        
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();

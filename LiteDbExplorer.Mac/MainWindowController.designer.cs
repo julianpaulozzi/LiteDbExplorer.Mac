@@ -12,6 +12,11 @@ namespace LiteDbExplorer.Mac
 	[Register ("MainWindowController")]
 	partial class MainWindowController
 	{
+		[Action ("newDatabase:")]
+		partial void newDatabase (Foundation.NSObject sender);
+
+		[Action ("openDatabase:")]
+		partial void openDatabase (Foundation.NSObject sender);
 		
 		void ReleaseDesignerOutlets ()
 		{

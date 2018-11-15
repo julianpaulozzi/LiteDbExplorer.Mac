@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -7,7 +7,7 @@
     <ProjectTypeGuids>{A3F8F2AB-B479-4A4A-A458-A89E7DC349F1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Exe</OutputType>
     <RootNamespace>LiteDbExplorer.Mac</RootNamespace>
-    <AssemblyName>LiteDbExplorer.Mac</AssemblyName>
+    <AssemblyName>LiteDb Explorer</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <TargetFrameworkIdentifier>Xamarin.Mac</TargetFrameworkIdentifier>
     <MonoMacResourcePrefix>Resources</MonoMacResourcePrefix>
@@ -45,9 +45,23 @@
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CSharpFunctionalExtensions, Version=1.13.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\CSharpFunctionalExtensions.1.13.0\lib\netstandard2.0\CSharpFunctionalExtensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="JetBrains.Annotations, Version=2018.2.1.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325">
+      <HintPath>..\packages\JetBrains.Annotations.2018.2.1\lib\netstandard2.0\JetBrains.Annotations.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.Mac" />
+    <Reference Include="LiteDB">
+      <HintPath>..\packages\LiteDB.4.1.4\lib\netstandard2.0\LiteDB.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\netstandard2.0\Newtonsoft.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
@@ -62,6 +76,14 @@
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\AppIcon-512.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\AppIcon-512%402x.png" />
     <ImageAsset Include="Assets.xcassets\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\.DS_Store" />
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\AppIcon-1024.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\AppIcon-257.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\AppIcon-33.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\AppIcon-513.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\AppIcon-64.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\AppIcon-64.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\AppIcon-1024.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -69,17 +91,52 @@
   <ItemGroup>
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
+    <Compile Include="MainWindowDelegate.cs" />
+    <Compile Include="Models\DatabaseReference.cs" />
+    <Compile Include="Models\CollectionReference.cs" />
+    <Compile Include="Models\DocumentReference.cs" />
+    <Compile Include="Models\FileCollectionReference.cs" />
+    <Compile Include="UIDialog.cs" />
     <Compile Include="ViewController.cs" />
     <Compile Include="ViewController.designer.cs">
       <DependentUpon>ViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="MainWindowController.cs" />
+    <Compile Include="MainWindowController.designer.cs">
+      <DependentUpon>MainWindowController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Main.storyboard" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\.DS_Store" />
+    <BundleResource Include="Resources\addfield.png" />
+    <BundleResource Include="Resources\close.png" />
+    <BundleResource Include="Resources\copy.png" />
+    <BundleResource Include="Resources\createitem.png" />
+    <BundleResource Include="Resources\cut.png" />
+    <BundleResource Include="Resources\database.png" />
+    <BundleResource Include="Resources\deleteitem.png" />
+    <BundleResource Include="Resources\dropdown.png" />
+    <BundleResource Include="Resources\export.png" />
+    <BundleResource Include="Resources\file-table.png" />
+    <BundleResource Include="Resources\file-table.xaml" />
+    <BundleResource Include="Resources\files.png" />
+    <BundleResource Include="Resources\icon.ico" />
+    <BundleResource Include="Resources\icon.png" />
+    <BundleResource Include="Resources\newdatabase.png" />
+    <BundleResource Include="Resources\opendb.png" />
+    <BundleResource Include="Resources\paste.png" />
+    <BundleResource Include="Resources\refresh.png" />
+    <BundleResource Include="Resources\table.png" />
+    <BundleResource Include="Resources\updateitem.png" />
+    <BundleResource Include="Resources\uploadfile.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
 </Project>
