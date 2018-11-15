@@ -1,0 +1,1 @@
+LiteDbExplorer.Mac
