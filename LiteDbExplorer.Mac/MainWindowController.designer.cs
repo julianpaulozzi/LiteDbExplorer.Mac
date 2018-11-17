@@ -17,6 +17,9 @@ namespace LiteDbExplorer.Mac
 
 		[Action ("openDatabase:")]
 		partial void openDatabase (Foundation.NSObject sender);
+
+		[Action ("openDatabaseSegment:")]
+		partial void openDatabaseSegment (Foundation.NSObject sender);
 		
 		void ReleaseDesignerOutlets ()
 		{

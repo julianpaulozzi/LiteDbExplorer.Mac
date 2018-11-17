@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AppKit;
 using CoreGraphics;
 using CSharpFunctionalExtensions;
+using Foundation;
 
 namespace LiteDbExplorer.Mac
 {
@@ -59,9 +60,9 @@ namespace LiteDbExplorer.Mac
             return false;
         }
 
-        public static Task<Maybe<string>> OpenFileDialog(string title, NSWindow window = null)
+        public static Task<Maybe<NSUrl>> OpenFileDialog(string title, NSWindow window = null)
         {
-            var completionSource = new TaskCompletionSource<Maybe<string>>();
+            var completionSource = new TaskCompletionSource<Maybe<NSUrl>>();
             
             var dlg = NSOpenPanel.OpenPanel;
             dlg.Title = title;
@@ -76,12 +77,12 @@ namespace LiteDbExplorer.Mac
                     var url = dlg.Urls.FirstOrDefault();
                     if (url != null)
                     {
-                        completionSource.SetResult(Maybe<string>.From(url.Path));
+                        completionSource.SetResult(Maybe<NSUrl>.From(url));
                         return;
                     }
                 }
                 
-                completionSource.SetResult(Maybe<string>.None);
+                completionSource.SetResult(Maybe<NSUrl>.None);
             }
 
             if (window != null)
@@ -97,9 +98,9 @@ namespace LiteDbExplorer.Mac
             return completionSource.Task;
         }
 
-        public static Task<Maybe<string>> SaveFileDialog(string title, NSWindow window = null)
+        public static Task<Maybe<NSUrl>> SaveFileDialog(string title, NSWindow window = null)
         {
-            var completionSource = new TaskCompletionSource<Maybe<string>>();
+            var completionSource = new TaskCompletionSource<Maybe<NSUrl>>();
             var dlg = NSSavePanel.SavePanel;
             dlg.Title = title;
 
@@ -107,11 +108,11 @@ namespace LiteDbExplorer.Mac
             {
                 if (result == 1)
                 {
-                    completionSource.SetResult(Maybe<string>.From(dlg.Url.Path));
+                    completionSource.SetResult(Maybe<NSUrl>.From(dlg.Url));
                     return;
                 }
                 
-                completionSource.SetResult(Maybe<string>.None);
+                completionSource.SetResult(Maybe<NSUrl>.None);
             }
 
             if (window != null)

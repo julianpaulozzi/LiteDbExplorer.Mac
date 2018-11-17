@@ -61,12 +61,12 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="File" id="bib-Uj-vzu">
                                     <items>
-                                        <menuItem title="New" keyEquivalent="n" id="Was-JA-tGl">
+                                        <menuItem title="New Database" keyEquivalent="n" id="Was-JA-tGl">
                                             <connections>
                                                 <action selector="newDocument:" target="Ady-hI-5gd" id="4Si-XN-c54"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Open…" keyEquivalent="o" id="IAo-SY-fd9">
+                                        <menuItem title="Open Database…" keyEquivalent="o" id="IAo-SY-fd9">
                                             <connections>
                                                 <action selector="openDocument:" target="Ady-hI-5gd" id="bVn-NM-KNZ"/>
                                             </connections>
@@ -104,18 +104,6 @@
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="revertDocumentToSaved:" target="Ady-hI-5gd" id="iJ3-Pv-kwq"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem isSeparatorItem="YES" id="aJh-i4-bef"/>
-                                        <menuItem title="Page Setup…" keyEquivalent="P" id="qIS-W8-SiK">
-                                            <modifierMask key="keyEquivalentModifierMask" shift="YES" command="YES"/>
-                                            <connections>
-                                                <action selector="runPageLayout:" target="Ady-hI-5gd" id="Din-rz-gC5"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Print…" keyEquivalent="p" id="aTl-1u-JFS">
-                                            <connections>
-                                                <action selector="print:" target="Ady-hI-5gd" id="qaZ-4w-aoO"/>
                                             </connections>
                                         </menuItem>
                                     </items>
@@ -411,32 +399,87 @@
         <scene sceneID="R2V-B0-nI4">
             <objects>
                 <windowController id="B8D-0N-5wS" customClass="MainWindowController" sceneMemberID="viewController">
-                    <window key="window" title="LiteDb Explorer" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
-                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
-                        <rect key="contentRect" x="201" y="400" width="600" height="400"/>
+                    <window key="window" title="LiteDb Explorer" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" titleVisibility="hidden" id="IQv-IB-iLA">
+                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" fullSizeContentView="YES"/>
+                        <rect key="contentRect" x="201" y="400" width="713" height="400"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
                         <value key="minSize" type="size" width="600" height="400"/>
-                        <toolbar key="toolbar" implicitIdentifier="EA37C4E6-7818-43AE-8065-AC640857D7D9" displayMode="iconAndLabel" sizeMode="small" id="hvR-f7-HJg">
+                        <toolbar key="toolbar" implicitIdentifier="EA37C4E6-7818-43AE-8065-AC640857D7D9" centeredItem="B1W-o7-C8c" displayMode="iconOnly" sizeMode="regular" id="hvR-f7-HJg">
                             <allowedToolbarItems>
-                                <toolbarItem implicitItemIdentifier="105292AB-84C0-4F8F-8610-4F426BEC95F2" label="Open" paletteLabel="Open Database" tag="-1" image="opendb" sizingBehavior="auto" id="XPe-C8-dVf">
+                                <toolbarItem implicitItemIdentifier="595855CD-26C7-4EC6-BAB0-33093891BE08" label="Window Title" paletteLabel="Window Title" sizingBehavior="auto" id="B1W-o7-C8c">
+                                    <nil key="toolTip"/>
+                                    <textField key="view" horizontalHuggingPriority="251" verticalHuggingPriority="750" id="cKS-nz-ZGz">
+                                        <rect key="frame" x="0.0" y="14" width="101" height="17"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <textFieldCell key="cell" lineBreakMode="truncatingTail" title="LiteDb Explorer" id="flf-2z-BGE">
+                                            <font key="font" usesAppearanceFont="YES"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                        <connections>
+                                            <binding destination="B8D-0N-5wS" name="value" keyPath="self.window.title" id="POG-9e-Zof">
+                                                <dictionary key="options">
+                                                    <bool key="NSAllowsEditingMultipleValuesSelection" value="NO"/>
+                                                </dictionary>
+                                            </binding>
+                                        </connections>
+                                    </textField>
+                                </toolbarItem>
+                                <toolbarItem implicitItemIdentifier="D8C07968-0FC3-4C68-BE64-BA5E1053A789" label="New Database" paletteLabel="New Database" toolTip="New Database" image="new_database_34_template" sizingBehavior="auto" id="WQc-Kc-m0c">
+                                    <button key="view" verticalHuggingPriority="750" id="3y6-j9-vhV">
+                                        <rect key="frame" x="22" y="14" width="40" height="25"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="new_database_34_template" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="lCe-Wn-qfS">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                    </button>
                                     <connections>
-                                        <action selector="openDatabase:" target="B8D-0N-5wS" id="Qm1-6U-BO2"/>
+                                        <action selector="newDatabase:" target="B8D-0N-5wS" id="zGc-eQ-qpL"/>
                                     </connections>
                                 </toolbarItem>
-                                <toolbarItem implicitItemIdentifier="D25635DD-15AD-473E-85FD-A1BDCDFFB267" label="New" paletteLabel="New Database" tag="-1" image="newdatabase" id="Zek-eJ-yq7">
-                                    <size key="minSize" width="24" height="24"/>
-                                    <size key="maxSize" width="24" height="24"/>
-                                    <connections>
-                                        <action selector="newDatabase:" target="B8D-0N-5wS" id="DFE-Dn-kW9"/>
-                                    </connections>
+                                <toolbarItem implicitItemIdentifier="CD51EF09-4516-4756-B7B7-ABB41457876D" label="Open Database" paletteLabel="Open Database" sizingBehavior="auto" id="Mg7-uX-OI0">
+                                    <nil key="toolTip"/>
+                                    <segmentedControl key="view" verticalHuggingPriority="750" id="6nd-Kl-UC3">
+                                        <rect key="frame" x="11" y="14" width="67" height="24"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <segmentedCell key="cell" lineBreakMode="truncatingHead" borderStyle="border" alignment="left" style="texturedSquare" trackingMode="momentary" id="wTJ-Qf-f1h" customClass="NSMenuSegmentedCell">
+                                            <font key="font" metaFont="system"/>
+                                            <segments>
+                                                <segment toolTip="Open Database" image="folder_opendb_34_template" width="40"/>
+                                                <segment label="Open Recent" toolTip="Open Recent" image="dropdown_arrow_template" width="20" tag="1">
+                                                    <menu key="menu" id="Wfs-ZU-J1n">
+                                                        <items>
+                                                            <menuItem title="Open Recent" id="wTR-xo-m7L">
+                                                                <modifierMask key="keyEquivalentModifierMask"/>
+                                                                <menu key="submenu" title="Open Recent" systemMenu="recentDocuments" id="C6v-pU-5EJ">
+                                                                    <items>
+                                                                        <menuItem title="Clear Menu" id="etU-Pt-ebh">
+                                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                                            <connections>
+                                                                                <action selector="clearRecentDocuments:" target="Oky-zY-oP4" id="tvC-Hj-2cC"/>
+                                                                            </connections>
+                                                                        </menuItem>
+                                                                    </items>
+                                                                </menu>
+                                                            </menuItem>
+                                                        </items>
+                                                    </menu>
+                                                </segment>
+                                            </segments>
+                                        </segmentedCell>
+                                        <connections>
+                                            <action selector="openDatabaseSegment:" target="B8D-0N-5wS" id="VMg-GM-8ww"/>
+                                        </connections>
+                                    </segmentedControl>
                                 </toolbarItem>
                                 <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="AiG-uz-i4t"/>
                                 <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="l3U-ae-y99"/>
                             </allowedToolbarItems>
                             <defaultToolbarItems>
-                                <toolbarItem reference="Zek-eJ-yq7"/>
-                                <toolbarItem reference="AiG-uz-i4t"/>
-                                <toolbarItem reference="XPe-C8-dVf"/>
+                                <toolbarItem reference="WQc-Kc-m0c"/>
+                                <toolbarItem reference="Mg7-uX-OI0"/>
+                                <toolbarItem reference="B1W-o7-C8c"/>
                                 <toolbarItem reference="l3U-ae-y99"/>
                             </defaultToolbarItems>
                         </toolbar>
@@ -449,8 +492,9 @@
                     </connections>
                 </windowController>
                 <customObject id="Oky-zY-oP4" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+                <userDefaultsController representsSharedInstance="YES" id="QHB-0w-Zyy"/>
             </objects>
-            <point key="canvasLocation" x="81" y="362"/>
+            <point key="canvasLocation" x="137.5" y="362"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="hIz-AP-VOD">
@@ -703,7 +747,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="newdatabase" width="24" height="24"/>
-        <image name="opendb" width="24" height="24"/>
+        <image name="dropdown_arrow_template" width="20" height="34"/>
+        <image name="folder_opendb_34_template" width="34" height="34"/>
+        <image name="new_database_34_template" width="34" height="34"/>
     </resources>
 </document>

@@ -7,7 +7,6 @@ using System.Linq;
 
 using Foundation;
 using AppKit;
-using CoreGraphics;
 using LiteDbExplorer.Mac.Models;
 using LiteDB;
 
@@ -38,15 +37,22 @@ namespace LiteDbExplorer.Mac
             }
         }
 
+        // To default main menu
+        [Export("newDocument:")]
+        protected void NewDocument(NSObject sender)
+        {
+            NewDatabase(sender);
+        }
+
         [Export("newDatabase:")]
         protected async void NewDatabase(NSObject sender)
         {
-            var path = await UIDialog.OpenFileDialog("Save Database", ShowSaveAsSheet ? Window : null);
-            if (path.HasValue)
+            var url = await UIDialog.SaveFileDialog("Save Database", ShowSaveAsSheet ? Window : null);
+            if (url.HasValue)
             {
                 try
                 {
-                    HandleCreateDatabase(path.Value);
+                    HandleCreateDatabase(url.Value);
                 }
                 catch (Exception e)
                 {
@@ -56,15 +62,23 @@ namespace LiteDbExplorer.Mac
             }
         }
 
+        // To default main menu
+        [Export("openDocument:")]
+        protected void OpenDocument(NSObject sender) 
+        {
+            OpenDatabase(sender);
+        }
+
+
         [Export("openDatabase:")]
         protected async void OpenDatabase(NSObject sender)
         {
-            var path = await UIDialog.OpenFileDialog("Open Database", ShowOpenAsSheet ? Window : null);
-            if (path.HasValue)
+            var url = await UIDialog.OpenFileDialog("Open Database", ShowOpenAsSheet ? Window : null);
+            if (url.HasValue)
             {
                 try
                 {
-                    HandleOpenDatabase(path.Value);
+                    HandleOpenDatabase(url.Value);
                 }
                 catch (Exception e)
                 {
@@ -73,21 +87,40 @@ namespace LiteDbExplorer.Mac
             }
         }
 
-        private void HandleCreateDatabase(string path) 
+        [Export("openDatabaseSegment:")]
+        protected void OpenDatabaseSegment(NSObject sender)
         {
+            if (!(sender is NSSegmentedControl segmentedCtrl))
+            {
+                return;
+            }
+
+            if (segmentedCtrl.SelectedSegment == 0)
+            {
+                OpenDatabase(sender);
+            }
+
+        }
+
+        public bool HandleCreateDatabase(NSUrl url) 
+        {
+            var path = url.Path;
             using (var stream = new FileStream(path, System.IO.FileMode.Create))
             {
                 LiteEngine.CreateDatabase(stream);
             }
 
-            HandleOpenDatabase(path);
+            HandleOpenDatabase(url);
+
+            return true;
         }
 
-        private void HandleOpenDatabase(string path)
+        public bool HandleOpenDatabase(NSUrl url)
         {
+            var path = url.Path;
             if (Databases.FirstOrDefault(a => a.Location == path) != null)
             {
-                return;
+                return false;
             }
 
             if (!File.Exists(path))
@@ -96,7 +129,7 @@ namespace LiteDbExplorer.Mac
                     "File not found",
                     "Cannot open database, file not found.",
                     NSAlertStyle.Critical);
-                return;
+                return false;
             }
             
             try
@@ -106,11 +139,16 @@ namespace LiteDbExplorer.Mac
                 {
                     if (UIDialog.ShowInputAlert(Window, "Database is password protected, enter password:", "Database password.", "", out password) != true)
                     {
-                        return;
+                        return false;
                     }
                 }
 
                 Databases.Add(new DatabaseReference(path, password));
+
+                // Add document to the Open Recent menu
+                NSDocumentController.SharedDocumentController.NoteNewRecentDocumentURL(url);
+
+                return true;
             }
             catch (Exception e)
             {
@@ -118,8 +156,9 @@ namespace LiteDbExplorer.Mac
                     "Database Error",
                     "Failed to open database:" + Environment.NewLine + e.Message,  
                     NSAlertStyle.Critical);
-                // Logger.Error(e, "Failed to process update: ");
             }
+
+            return false;
         }
         
 

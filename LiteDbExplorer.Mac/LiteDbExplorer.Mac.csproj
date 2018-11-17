@@ -84,6 +84,32 @@
     <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\AppIcon-64.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\AppIcon-64.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\AppIcon-1024.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\folder_opendb_template.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\folder_opendb_template.imageset\folder_opendb.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\database_template.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\database_template.imageset\database_template.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\database_wizard_template.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\database_wizard_template.imageset\database_wizard_template.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\new_database_template.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\new_database_template.imageset\new_database_template.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\readonly_database_template.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\readonly_database_template.imageset\readonly_database_template.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\arrow_down.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\arrow_down.imageset\arrow_down.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\arrow_down_template.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\arrow_down_template.imageset\arrow_down_template.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\dropdown_arrow.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\dropdown_arrow.imageset\dropdown_arrow.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\dropdown_arrow_template.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\dropdown_arrow_template.imageset\dropdown_arrow_template.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\folder_opendb_34.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\folder_opendb_34.imageset\folder_opendb_34.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\folder_opendb_templete_34.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\folder_opendb_templete_34.imageset\folder_opendb_34.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\new_database_34_template.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\new_database_34_template.imageset\new_database_34_template.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\folder_opendb_34_template.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\folder_opendb_34_template.imageset\folder_opendb_34_template.pdf" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -110,6 +136,7 @@
     <Compile Include="MainWindowController.designer.cs">
       <DependentUpon>MainWindowController.cs</DependentUpon>
     </Compile>
+    <Compile Include="NSMenuSegmentedCell.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Main.storyboard" />
