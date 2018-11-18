@@ -1,5 +1,6 @@
 ﻿using AppKit;
 using Foundation;
+using LiteDbExplorer.Mac.Models;
 
 namespace LiteDbExplorer.Mac
 {
@@ -18,6 +19,7 @@ namespace LiteDbExplorer.Mac
         public override void WillTerminate(NSNotification notification)
         {
             // Insert code here to tear down your application
+            SessionData.Current.CloseDatabases();
         }
 
         #region Override Methods

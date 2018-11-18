@@ -8,8 +8,8 @@ using Foundation;
 
 namespace LiteDbExplorer.Mac
 {
-    [Register("ViewController")]
-    partial class ViewController
+    [Register("MainViewController")]
+    partial class MainViewController
     {
         void ReleaseDesignerOutlets()
         {

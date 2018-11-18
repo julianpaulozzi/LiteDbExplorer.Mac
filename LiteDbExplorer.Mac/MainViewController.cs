@@ -5,9 +5,9 @@ using Foundation;
 
 namespace LiteDbExplorer.Mac
 {
-    public partial class ViewController : NSViewController
+    public partial class MainViewController : NSViewController
     {
-        public ViewController(IntPtr handle) : base(handle)
+        public MainViewController(IntPtr handle) : base(handle)
         {
         }
 

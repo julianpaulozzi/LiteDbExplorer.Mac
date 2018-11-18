@@ -3,24 +3,183 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using AppKit;
+using Foundation;
 using LiteDB;
 
 namespace LiteDbExplorer.Mac.Models
 {
-    public class DatabaseReference : INotifyPropertyChanged, IDisposable
+    [Register(nameof(DatabaseReference))]
+    public class DatabaseReferenceVM : NSObject
     {
+        private string _name;
+        private string _location;
+        private NSMutableArray _children = new NSMutableArray();
+
+        [Export(nameof(InstanceId))]
+        public string InstanceId { get; set; }
+
+        [Export(nameof(Name))]
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                WillChangeValue(nameof(Name));
+                _name = value;
+                DidChangeValue(nameof(Name));
+            }
+        }
+
+        [Export(nameof(Location))]
+        public string Location
+        {
+            get => _location;
+            set
+            {
+                WillChangeValue(nameof(Location));
+                _location = value;
+                DidChangeValue(nameof(Location));
+            }
+        }
+
+        [Export(nameof(Collections))]
+        public NSArray Collections
+        {
+            get => _children;
+        }
+
+    }
+
+    public enum DbNavigationNodeType
+    {
+        Database,
+        Collection,
+        FileCollection
+    }
+
+    [Register(nameof(DbNavigationNode))]
+    public class DbNavigationNode : NSObject
+    {
+        private string _name;
+        private DbNavigationNodeType _nodeType;
+        private NSMutableArray _children = new NSMutableArray();
+
+        [Export(nameof(InstanceId))]
+        public string InstanceId { get; set; }
+
+        [Export(nameof(NodeType))]
+        public DbNavigationNodeType NodeType
+        {
+            get => _nodeType;
+            set
+            {
+                WillChangeValue(nameof(IsLeaf));
+                WillChangeValue(nameof(Icon));
+                _nodeType = value;
+                DidChangeValue(nameof(IsLeaf));
+                DidChangeValue(nameof(Icon));
+            }
+        }
+
+        [Export(nameof(Name))]
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                WillChangeValue(nameof(Name));
+                _name = value;
+                DidChangeValue(nameof(Name));
+            }
+        }
+
+        [Export(nameof(IsLeaf))]
+        public bool IsLeaf => NodeType != DbNavigationNodeType.Database;
+
+        [Export(nameof(Icon))]
+        public NSImage Icon
+        {
+            get 
+            {
+                switch (NodeType)
+                {
+                    case DbNavigationNodeType.Database:
+                        return NSImage.ImageNamed ("database.png");
+                    case DbNavigationNodeType.Collection:
+                        return NSImage.ImageNamed ("table.png");
+                    case DbNavigationNodeType.FileCollection:
+                        return NSImage.ImageNamed ("file-table.png");
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+        }
+
+        [Export(nameof(Children))]
+        public NSArray Children => _children;
+
+        [Export(nameof(ChildrenCount))]
+        public nint ChildrenCount
+        {
+            get { return (nint)_children.Count; }
+        }
+
+        [Export("addObject:")]
+        public void AddChildren(DbNavigationNode node)
+        {
+            WillChangeValue(nameof(Children));
+            _children.Add(node);
+            DidChangeValue(nameof(Children));
+        }
+    }
+
+    public class DatabaseReference : INotifyPropertyChanging, INotifyPropertyChanged, IDisposable
+    {
+        private string _name;
+        private string _location;
+        private ObservableCollection<CollectionReference> _collections;
+
+        public string InstanceId => Guid.NewGuid().ToString();
+
         public LiteDatabase LiteDatabase
         {
             get;
         }
 
-        public string Name { get; set; }
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                OnPropertyChanging(nameof(Name));
+                _name = value;
+                OnPropertyChanged(nameof(Name));
+            }
+        }
 
-        public string Location { get; set; }
+        public string Location
+        {
+            get => _location;
+            set
+            {
+                OnPropertyChanging(nameof(Location));
+                _location = value;
+                OnPropertyChanged(nameof(Location));
+            }
+        }
 
-        public ObservableCollection<CollectionReference> Collections { get; set; }
-        
-        public event PropertyChangedEventHandler PropertyChanged;
+        [Export(nameof(Collections))]
+        public ObservableCollection<CollectionReference> Collections
+        {
+            get => _collections;
+            set
+            {
+                OnPropertyChanging(nameof(Collections));
+                _collections = value;
+                OnPropertyChanged(nameof(Collections));
+            }
+        }
 
         public DatabaseReference(string path, string password)
         {            
@@ -42,24 +201,12 @@ namespace LiteDbExplorer.Mac.Models
         private void UpdateCollections()
         {
             Collections = new ObservableCollection<CollectionReference>(LiteDatabase.GetCollectionNames()
-                .Where(a => a != @"_chunks").OrderBy(a => a).Select(a =>
-                {
-                    if (a == @"_files")
-                    {
-                        return new FileCollectionReference(a, this);
-                    }
-
-                    return new CollectionReference(a, this);
-                }));
-
-            OnPropertyChanged(nameof(Collections));
+                .Where(a => a != @"_chunks")
+                .OrderBy(a => a)
+                .Select(
+                    a => a == @"_files" ? new FileCollectionReference(a, this) : new CollectionReference(a, this))
+                );
         }
-
-        public void OnPropertyChanged(string name)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
-
 
         public DocumentReference AddFile(string id, string path)
         {
@@ -124,6 +271,20 @@ namespace LiteDbExplorer.Mac.Models
         {
             UpdateCollections();
         }
+
+        public event PropertyChangingEventHandler PropertyChanging;
         
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanging(string name)
+        {
+            PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(name));
+        }
+        
+        private void OnPropertyChanged(string name)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
     }
 }

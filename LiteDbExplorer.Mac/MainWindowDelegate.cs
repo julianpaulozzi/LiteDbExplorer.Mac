@@ -35,7 +35,7 @@ namespace LiteDbExplorer.Mac
                 var result = alert.RunSheetModal (Window);
 
                 // Grab controller
-                var viewController = Window.ContentViewController as ViewController;
+                var viewController = Window.ContentViewController as MainViewController;
                 
                 // Take action based on result
                 switch (result) {

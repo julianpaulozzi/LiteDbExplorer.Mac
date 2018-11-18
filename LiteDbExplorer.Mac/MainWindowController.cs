@@ -16,25 +16,25 @@ namespace LiteDbExplorer.Mac
 	{
 		public MainWindowController (IntPtr handle) : base (handle)
 		{
+
 		}
 
         public bool ShowSaveAsSheet { get; set; } = true;
 
         public bool ShowOpenAsSheet { get; set; } = true;
-        
-        public ObservableCollection<DatabaseReference> Databases
+
+        public override void WindowDidLoad()
         {
-            get; set;
-        } = new ObservableCollection<DatabaseReference>();
+            base.ShouldCascadeWindows = false;
+            base.WindowFrameAutosaveName = @"PrefsMainWindow";
+            base.WindowDidLoad();
+        }
 
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
-            
-            foreach (var db in Databases)
-            {
-                db.Dispose();
-            }
+
+            SessionData.Current.CloseDatabases();
         }
 
         // To default main menu
@@ -118,7 +118,7 @@ namespace LiteDbExplorer.Mac
         public bool HandleOpenDatabase(NSUrl url)
         {
             var path = url.Path;
-            if (Databases.FirstOrDefault(a => a.Location == path) != null)
+            if (SessionData.Current.HasDatabaseReference(path))
             {
                 return false;
             }
@@ -143,7 +143,7 @@ namespace LiteDbExplorer.Mac
                     }
                 }
 
-                Databases.Add(new DatabaseReference(path, password));
+                SessionData.Current.AddDatabase(new DatabaseReference(path, password));
 
                 // Add document to the Open Recent menu
                 NSDocumentController.SharedDocumentController.NoteNewRecentDocumentURL(url);

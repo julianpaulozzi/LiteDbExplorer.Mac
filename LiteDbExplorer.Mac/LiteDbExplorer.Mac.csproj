@@ -128,15 +128,20 @@
     <Compile Include="Models\DocumentReference.cs" />
     <Compile Include="Models\FileCollectionReference.cs" />
     <Compile Include="UIDialog.cs" />
-    <Compile Include="ViewController.cs" />
-    <Compile Include="ViewController.designer.cs">
-      <DependentUpon>ViewController.cs</DependentUpon>
+    <Compile Include="MainViewController.cs" />
+    <Compile Include="MainViewController.designer.cs">
+      <DependentUpon>MainViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="MainWindowController.cs" />
     <Compile Include="MainWindowController.designer.cs">
       <DependentUpon>MainWindowController.cs</DependentUpon>
     </Compile>
     <Compile Include="NSMenuSegmentedCell.cs" />
+    <Compile Include="Models\SessionData.cs" />
+    <Compile Include="DbNavigationViewController.cs" />
+    <Compile Include="DbNavigationViewController.designer.cs">
+      <DependentUpon>DbNavigationViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Main.storyboard" />

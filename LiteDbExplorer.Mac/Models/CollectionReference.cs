@@ -1,18 +1,82 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using Foundation;
+using JetBrains.Annotations;
 using LiteDB;
 
 namespace LiteDbExplorer.Mac.Models
 {
-    public class CollectionReference : INotifyPropertyChanged
+    [Register(nameof(CollectionReferenceVM))]
+    public class CollectionReferenceVM : NSObject
     {
-        public string Name { get; set; }
+        private DatabaseReferenceVM _database;
+        private string _name;
 
-        public DatabaseReference Database { get; set; }
-        
+        private string _instanceId;
+        [Export(nameof(InstanceId))]
+        public string InstanceId
+        {
+            get => _instanceId;
+        }
+
+        [Export(nameof(Name))]
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                WillChangeValue(nameof(Name));
+                _name = value;
+                DidChangeValue(nameof(Name));
+            }
+        }
+
+        [Export(nameof(Database))]
+        public DatabaseReferenceVM Database
+        {
+            get => _database;
+            set
+            {
+                WillChangeValue(nameof(Database));
+                _database = value;
+                DidChangeValue(nameof(Database));
+            }
+        }
+    }
+
+    public class CollectionReference : INotifyPropertyChanging, INotifyPropertyChanged
+    {
         private ObservableCollection<DocumentReference> _items;
+        private DatabaseReference _database;
+        private string _name;
+
+        public string InstanceId => Guid.NewGuid().ToString();
+
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                OnPropertyChanging(nameof(Name));
+                _name = value;
+                OnPropertyChanged(nameof(Name));
+            }
+        }
+
+        public DatabaseReference Database
+        {
+            get => _database;
+            set
+            {
+                OnPropertyChanging(nameof(Database));
+                _database = value;
+                OnPropertyChanged(nameof(Database));
+            }
+        }
+
         public ObservableCollection<DocumentReference> Items
         {
             get
@@ -31,19 +95,13 @@ namespace LiteDbExplorer.Mac.Models
 
             set
             {
+                OnPropertyChanging(nameof(Items));
                 _items = value;
                 OnPropertyChanged(nameof(Items));
             }
         }
 
         public LiteCollection<BsonDocument> LiteCollection => Database.LiteDatabase.GetCollection(Name);
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public void OnPropertyChanged(string name)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
 
         public CollectionReference(string name, DatabaseReference database)
         {
@@ -80,6 +138,8 @@ namespace LiteDbExplorer.Mac.Models
 
         public virtual void Refresh()
         {
+            OnPropertyChanging(nameof(Items));
+            
             if (_items == null)
             {
                 _items = new ObservableCollection<DocumentReference>();
@@ -108,6 +168,21 @@ namespace LiteDbExplorer.Mac.Models
             }
 
             OnPropertyChanged(string.Empty);
+        }
+        
+        public event PropertyChangingEventHandler PropertyChanging;
+        
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanging(string name)
+        {
+            PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(name));
+        }
+        
+        [NotifyPropertyChangedInvocator]
+        private void OnPropertyChanged(string name)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
 }
