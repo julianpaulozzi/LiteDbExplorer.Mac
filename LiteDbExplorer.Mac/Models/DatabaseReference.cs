@@ -140,7 +140,24 @@ namespace LiteDbExplorer.Mac.Models
         private string _location;
         private ObservableCollection<CollectionReference> _collections;
 
-        public string InstanceId => Guid.NewGuid().ToString();
+        public DatabaseReference()
+        {
+            InstanceId = Guid.NewGuid().ToString();
+        }
+
+        public DatabaseReference(string path, string password) : this()
+        {
+            Location = path;
+            Name = Path.GetFileName(path);
+
+            LiteDatabase = string.IsNullOrEmpty(password) ?
+                new LiteDatabase(path) :
+                new LiteDatabase($"Filename={path};Password={password}");
+
+            UpdateCollections();
+        }
+
+        public string InstanceId { get; private set; }
 
         public LiteDatabase LiteDatabase
         {
@@ -179,18 +196,6 @@ namespace LiteDbExplorer.Mac.Models
                 _collections = value;
                 OnPropertyChanged(nameof(Collections));
             }
-        }
-
-        public DatabaseReference(string path, string password)
-        {            
-            Location = path;
-            Name = Path.GetFileName(path);
-
-            LiteDatabase = string.IsNullOrEmpty(password) ? 
-                new LiteDatabase(path) : 
-                new LiteDatabase($"Filename={path};Password={password}");
-
-            UpdateCollections();
         }
 
         public void Dispose()

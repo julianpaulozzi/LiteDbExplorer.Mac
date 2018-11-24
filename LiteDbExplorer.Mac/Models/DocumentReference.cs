@@ -58,15 +58,16 @@ namespace LiteDbExplorer.Mac.Models
 
         public DocumentReference()
         {
+            InstanceId = Guid.NewGuid().ToString();
         }
 
-        public DocumentReference(BsonDocument document, CollectionReference collection)
+        public DocumentReference(BsonDocument document, CollectionReference collection) : this()
         {
             LiteDocument = document;
             Collection = collection;
         }
 
-        public string InstanceId => Guid.NewGuid().ToString();
+        public string InstanceId { get; }
 
         public BsonDocument LiteDocument
         {

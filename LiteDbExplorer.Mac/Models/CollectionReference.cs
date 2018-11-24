@@ -53,7 +53,18 @@ namespace LiteDbExplorer.Mac.Models
         private DatabaseReference _database;
         private string _name;
 
-        public string InstanceId => Guid.NewGuid().ToString();
+        public CollectionReference()
+        {
+            InstanceId = Guid.NewGuid().ToString();
+        }
+
+        public CollectionReference(string name, DatabaseReference database) : this()
+        {
+            Name = name;
+            Database = database;
+        }
+
+        public string InstanceId { get; private set; }
 
         public string Name
         {
@@ -102,12 +113,6 @@ namespace LiteDbExplorer.Mac.Models
         }
 
         public LiteCollection<BsonDocument> LiteCollection => Database.LiteDatabase.GetCollection(Name);
-
-        public CollectionReference(string name, DatabaseReference database)
-        {
-            Name = name;
-            Database = database;
-        }
 
         public virtual void UpdateItem(DocumentReference document)
         {

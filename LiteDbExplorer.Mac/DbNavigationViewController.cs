@@ -6,12 +6,14 @@ using Foundation;
 using AppKit;
 using LiteDbExplorer.Mac.Models;
 using System.Collections.Specialized;
+using System.Collections.Generic;
 
 namespace LiteDbExplorer.Mac
 {
 	public partial class DbNavigationViewController : NSViewController
 	{
-        private NSMutableArray _databases = new NSMutableArray();
+        private bool _initialized;
+        private NSMutableArray<DbNavigationNode> _databases = new NSMutableArray<DbNavigationNode>();
 
         public DbNavigationViewController (IntPtr handle) : base (handle)
 		{
@@ -25,15 +27,41 @@ namespace LiteDbExplorer.Mac
 
         public override void AwakeFromNib()
         {
-            if(_databases.Count > 0) 
+            base.AwakeFromNib();
+
+            if (_initialized || dbNavOutlineView == null)
             {
                 return;
             }
 
-            base.AwakeFromNib();
-
             SessionData.Current.Databases.CollectionChanged -= Databases_CollectionChanged;
             SessionData.Current.Databases.CollectionChanged += Databases_CollectionChanged;
+
+            var dbNavOutlineViewDelegate = new DbNavigationOutlineDelegate();
+
+            dbNavOutlineViewDelegate.NodeSelected += DbNavOutlineViewDelegate_NodeSelected;
+
+            dbNavOutlineView.Delegate = dbNavOutlineViewDelegate;
+
+            _initialized = true;
+        }
+
+        private void DbNavOutlineViewDelegate_NodeSelected(object sender, ElementNodeEventArgs e)
+        {
+            SessionData.Current.SelectNode(e.NodeType, e.InstanceId);
+        }
+
+
+        [Export("dbNavClick:")]
+        protected void DbNavClick(NSObject sender)
+        {
+            // Console.WriteLine("dbNavClick:");
+        }
+
+        [Export("dbNavDoubleClick:")]
+        protected void DbNavDoubleClick(NSObject sender)
+        {
+            // Console.WriteLine("dbNavDoubleClick:");
         }
 
         private void Databases_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -63,6 +91,34 @@ namespace LiteDbExplorer.Mac
                     AddDatabase(dbNav);
                 }
             }
+            else if(e.Action == NotifyCollectionChangedAction.Remove)
+            {
+                if (!(e.OldItems is IEnumerable<DatabaseReference> oldItems))
+                {
+                    return;
+                }
+
+                var indexToRemove = new HashSet<nuint>();
+                foreach (var dbRef in oldItems)
+                {
+                    for (nuint i = 0; i < _databases.Count; i++)
+                    {
+                        var dbNavNode = _databases.GetItem<DbNavigationNode>(i);
+                        if(dbNavNode != null && dbNavNode.InstanceId.Equals(dbRef.InstanceId))
+                        {
+                            indexToRemove.Add(i);
+                        }
+                    }
+                }
+                foreach (var index in indexToRemove)
+                {
+                    RemoveDatabase((nint)index);
+                }
+            }
+            else if(e.Action == NotifyCollectionChangedAction.Reset)
+            {
+                ClearDatabases();
+            }
         }
 
 
@@ -91,11 +147,54 @@ namespace LiteDbExplorer.Mac
         }
 
         [Export("setDatabasesArray:")]
-        public void SetDatabases(NSMutableArray array)
+        public void SetDatabases(NSMutableArray<DbNavigationNode> array)
         {
             WillChangeValue(nameof(Databases));
             _databases = array;
             DidChangeValue(nameof(Databases));
         }
+
+        public void ClearDatabases()
+        {
+            WillChangeValue(nameof(Databases));
+            _databases.RemoveAllObjects();
+            DidChangeValue(nameof(Databases));
+        }
+
     }
+
+    public class ElementNodeEventArgs : EventArgs
+    {
+        public ElementNodeEventArgs(DbNavigationNodeType nodeType, string instanceId)
+        {
+            NodeType = nodeType;
+            InstanceId = instanceId;
+        }
+
+        public string InstanceId { get; }
+
+        public DbNavigationNodeType NodeType { get; }
+    }
+
+    public class DbNavigationOutlineDelegate : NSOutlineViewDelegate
+    {
+        public event EventHandler<ElementNodeEventArgs> NodeSelected;
+
+        public override bool ShouldSelectItem(NSOutlineView outlineView, NSObject item)
+        {
+            var node = item as NSTreeNode;
+            if (node?.RepresentedObject is DbNavigationNode dbNode)
+            {
+                OnNodeSelected(dbNode.NodeType, dbNode.InstanceId);
+            }
+
+            return true;
+        }
+
+        protected virtual void OnNodeSelected(DbNavigationNodeType nodeType, string instanceId)
+        {
+            NodeSelected?.Invoke(this, new ElementNodeEventArgs(nodeType, instanceId));
+        }
+    }
+
 }

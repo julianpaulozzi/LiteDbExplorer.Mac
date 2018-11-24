@@ -113,6 +113,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
+    <Folder Include="Extensions\" />
+    <Folder Include="Converters\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -126,6 +128,7 @@
     <Compile Include="Models\DatabaseReference.cs" />
     <Compile Include="Models\CollectionReference.cs" />
     <Compile Include="Models\DocumentReference.cs" />
+    <Compile Include="Models\EventArgs.cs" />
     <Compile Include="Models\FileCollectionReference.cs" />
     <Compile Include="UIDialog.cs" />
     <Compile Include="MainViewController.cs" />
@@ -142,6 +145,12 @@
     <Compile Include="DbNavigationViewController.designer.cs">
       <DependentUpon>DbNavigationViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="ListCollectionViewController.cs" />
+    <Compile Include="ListCollectionViewController.designer.cs">
+      <DependentUpon>ListCollectionViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Extensions\LinqExtensions.cs" />
+    <Compile Include="Converters\BsonValueToStringConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Main.storyboard" />
