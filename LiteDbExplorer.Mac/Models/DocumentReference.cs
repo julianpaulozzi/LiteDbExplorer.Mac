@@ -1,56 +1,10 @@
 using System;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using Foundation;
 using JetBrains.Annotations;
 using LiteDB;
 
 namespace LiteDbExplorer.Mac.Models
 {
-    [Register(nameof(DocumentReferenceVM))]
-    public class DocumentReferenceVM : NSObject
-    {
-        private BsonDocumentVM _liteDocument;
-        private CollectionReferenceVM _collection;
-
-        private string _instanceId;
-        [Export(nameof(InstanceId))]
-        public string InstanceId
-        {
-            get => _instanceId;
-        }
-
-        [Export(nameof(LiteDocument))]
-        public BsonDocumentVM LiteDocument
-        {
-            get => _liteDocument;
-            set
-            {
-                WillChangeValue(nameof(LiteDocument));
-                _liteDocument = value;
-                DidChangeValue(nameof(LiteDocument));
-            }
-        }
-
-        [Export(nameof(Collection))]
-        public CollectionReferenceVM Collection
-        {
-            get => _collection;
-            set
-            {
-                WillChangeValue(nameof(Collection));
-                _collection = value;
-                DidChangeValue(nameof(Collection));
-            }
-        }
-    }
-
-    [Register(nameof(BsonDocumentVM))]
-    public class BsonDocumentVM : NSObject
-    {
-
-    }
-
     public class DocumentReference : INotifyPropertyChanging, INotifyPropertyChanged
     {
         private BsonDocument _liteDocument;

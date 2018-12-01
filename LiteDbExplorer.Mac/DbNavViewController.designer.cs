@@ -9,20 +9,23 @@ using System.CodeDom.Compiler;
 
 namespace LiteDbExplorer.Mac
 {
-	[Register ("DbNavigationViewController")]
+	[Register ("DbNavViewController")]
 	partial class DbNavViewController
 	{
 		[Outlet]
-		AppKit.NSOutlineView dbNavOutlineView { get; set; }
+		AppKit.NSMenu dbNavMenu { get; set; }
 
 		[Outlet]
-		AppKit.NSMenu dbVavMenu { get; set; }
+		AppKit.NSOutlineView dbNavOutlineView { get; set; }
 
 		[Action ("dbNavClick:")]
 		partial void dbNavClick (Foundation.NSObject sender);
 
 		[Action ("dbNavDoubleClick:")]
 		partial void dbNavDoubleClick (Foundation.NSObject sender);
+
+		[Action ("validateMenuItem:")]
+		partial void validateMenuItem (AppKit.NSMenuItem item);
 		
 		void ReleaseDesignerOutlets ()
 		{
@@ -31,9 +34,9 @@ namespace LiteDbExplorer.Mac
 				dbNavOutlineView = null;
 			}
 
-			if (dbVavMenu != null) {
-				dbVavMenu.Dispose ();
-				dbVavMenu = null;
+			if (dbNavMenu != null) {
+				dbNavMenu.Dispose ();
+				dbNavMenu = null;
 			}
 		}
 	}

@@ -7,17 +7,18 @@ using AppKit;
 using LiteDbExplorer.Mac.Models;
 using System.Collections.Specialized;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace LiteDbExplorer.Mac
 {
-	public partial class DbNavigationViewController : NSViewController
-	{
+    public partial class DbNavViewController : NSViewController
+    {
         private bool _initialized;
         private NSMutableArray<DbNavigationNode> _databases = new NSMutableArray<DbNavigationNode>();
 
-        public DbNavigationViewController (IntPtr handle) : base (handle)
-		{
-		}
+        public DbNavViewController (IntPtr handle) : base (handle)
+        {
+        }
 
         [Export(nameof(Databases))]
         public NSArray Databases
@@ -37,7 +38,9 @@ namespace LiteDbExplorer.Mac
             SessionData.Current.Databases.CollectionChanged -= Databases_CollectionChanged;
             SessionData.Current.Databases.CollectionChanged += Databases_CollectionChanged;
 
-            var dbNavOutlineViewDelegate = new DbNavigationOutlineDelegate();
+            var dbNavOutlineViewDelegate = new DbNavOutlineDelegate();
+
+            dbNavOutlineViewDelegate.MenuForItem = GetMenuForItem;
 
             dbNavOutlineViewDelegate.NodeSelected += DbNavOutlineViewDelegate_NodeSelected;
 
@@ -45,6 +48,43 @@ namespace LiteDbExplorer.Mac
 
             _initialized = true;
         }
+
+        private NSMenu GetMenuForItem(NSOutlineView outlineView, NSObject item)
+        {
+            foreach (var menuItem in dbNavMenu.Items)
+            {
+                menuItem.Activated -= MenuItem_Activated;
+            }
+
+            var node = item as NSTreeNode;
+            if (node?.RepresentedObject is DbNavigationNode dbNode)
+            {
+                foreach (var menuItem in dbNavMenu.Items)
+                {
+                    menuItem.Activated += MenuItem_Activated;
+                    menuItem.RepresentedObject = dbNode;
+                }
+
+                return dbNavMenu;
+            }
+
+            return null;
+        }
+
+        protected void MenuItem_Activated(object sender, EventArgs e)
+        {
+            var menuItem = sender as NSMenuItem;
+            if (menuItem?.RepresentedObject is DbNavigationNode dbNode)
+            {
+                switch(menuItem.Tag)
+                {
+                    case 4:
+                        SessionData.Current.CloseDatabase(dbNode.InstanceId);
+                        break;
+                }
+            }
+        }
+
 
         private void DbNavOutlineViewDelegate_NodeSelected(object sender, ElementNodeEventArgs e)
         {
@@ -66,7 +106,7 @@ namespace LiteDbExplorer.Mac
 
         private void Databases_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if(e.Action == NotifyCollectionChangedAction.Add)
+            if (e.Action == NotifyCollectionChangedAction.Add)
             {
                 foreach (var database in SessionData.Current.Databases)
                 {
@@ -91,20 +131,20 @@ namespace LiteDbExplorer.Mac
                     AddDatabase(dbNav);
                 }
             }
-            else if(e.Action == NotifyCollectionChangedAction.Remove)
+            else if (e.Action == NotifyCollectionChangedAction.Remove)
             {
-                if (!(e.OldItems is IEnumerable<DatabaseReference> oldItems))
+                if (e.OldItems == null)
                 {
                     return;
                 }
 
                 var indexToRemove = new HashSet<nuint>();
-                foreach (var dbRef in oldItems)
+                foreach (var dbRef in e.OldItems.OfType<DatabaseReference>())
                 {
                     for (nuint i = 0; i < _databases.Count; i++)
                     {
                         var dbNavNode = _databases.GetItem<DbNavigationNode>(i);
-                        if(dbNavNode != null && dbNavNode.InstanceId.Equals(dbRef.InstanceId))
+                        if (dbNavNode != null && dbNavNode.InstanceId.Equals(dbRef.InstanceId))
                         {
                             indexToRemove.Add(i);
                         }
@@ -115,7 +155,7 @@ namespace LiteDbExplorer.Mac
                     RemoveDatabase((nint)index);
                 }
             }
-            else if(e.Action == NotifyCollectionChangedAction.Reset)
+            else if (e.Action == NotifyCollectionChangedAction.Reset)
             {
                 ClearDatabases();
             }
@@ -160,41 +200,5 @@ namespace LiteDbExplorer.Mac
             _databases.RemoveAllObjects();
             DidChangeValue(nameof(Databases));
         }
-
     }
-
-    public class ElementNodeEventArgs : EventArgs
-    {
-        public ElementNodeEventArgs(DbNavigationNodeType nodeType, string instanceId)
-        {
-            NodeType = nodeType;
-            InstanceId = instanceId;
-        }
-
-        public string InstanceId { get; }
-
-        public DbNavigationNodeType NodeType { get; }
-    }
-
-    public class DbNavigationOutlineDelegate : NSOutlineViewDelegate
-    {
-        public event EventHandler<ElementNodeEventArgs> NodeSelected;
-
-        public override bool ShouldSelectItem(NSOutlineView outlineView, NSObject item)
-        {
-            var node = item as NSTreeNode;
-            if (node?.RepresentedObject is DbNavigationNode dbNode)
-            {
-                OnNodeSelected(dbNode.NodeType, dbNode.InstanceId);
-            }
-
-            return true;
-        }
-
-        protected virtual void OnNodeSelected(DbNavigationNodeType nodeType, string instanceId)
-        {
-            NodeSelected?.Invoke(this, new ElementNodeEventArgs(nodeType, instanceId));
-        }
-    }
-
 }

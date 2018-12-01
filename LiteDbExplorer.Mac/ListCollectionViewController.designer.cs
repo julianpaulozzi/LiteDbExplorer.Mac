@@ -13,6 +13,9 @@ namespace LiteDbExplorer.Mac
 	partial class ListCollectionViewController
 	{
 		[Outlet]
+		AppKit.NSMenu listCollectionMenu { get; set; }
+
+		[Outlet]
 		AppKit.NSTableView listCollectionTable { get; set; }
 		
 		void ReleaseDesignerOutlets ()
@@ -20,6 +23,11 @@ namespace LiteDbExplorer.Mac
 			if (listCollectionTable != null) {
 				listCollectionTable.Dispose ();
 				listCollectionTable = null;
+			}
+
+			if (listCollectionMenu != null) {
+				listCollectionMenu.Dispose ();
+				listCollectionMenu = null;
 			}
 		}
 	}

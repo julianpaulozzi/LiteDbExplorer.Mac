@@ -71,6 +71,7 @@ namespace LiteDbExplorer.Mac
             var dataSource = new ListCollectionTableDataSource(e.Data);
             listCollectionTable.DataSource = dataSource;
             listCollectionTable.Delegate = new ListCollectionTableDelegate(dataSource);
+            listCollectionTable.Menu = listCollectionMenu;
         }
     }
 
@@ -112,6 +113,9 @@ namespace LiteDbExplorer.Mac
 
         public override NSView GetViewForItem(NSTableView tableView, NSTableColumn tableColumn, nint row)
         {
+
+            var stringValue = BsonValueToStringConverter.Convert(DataSource.CollectionReference.Items[(int)row].LiteDocument[tableColumn.Identifier]);
+
             // This pattern allows you reuse existing views when they are no-longer in use.
             // If the returned view is null, you instance up a new view
             // If a non-null view is returned, you modify it enough to reflect the new data
@@ -129,8 +133,6 @@ namespace LiteDbExplorer.Mac
                     ControlSize = NSControlSize.Regular
                 };
             }
-
-            var stringValue = BsonValueToStringConverter.Convert(DataSource.CollectionReference.Items[(int)row].LiteDocument[tableColumn.Identifier]);
 
             view.StringValue = stringValue;
 

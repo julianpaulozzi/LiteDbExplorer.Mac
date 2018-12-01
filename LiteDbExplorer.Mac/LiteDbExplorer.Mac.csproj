@@ -60,7 +60,7 @@
       <HintPath>..\packages\LiteDB.4.1.4\lib\netstandard2.0\LiteDB.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\netstandard2.0\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\netstandard2.0\Newtonsoft.Json.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -115,6 +115,7 @@
     <Folder Include="Resources\" />
     <Folder Include="Extensions\" />
     <Folder Include="Converters\" />
+    <Folder Include="NSPresentation\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -130,7 +131,6 @@
     <Compile Include="Models\DocumentReference.cs" />
     <Compile Include="Models\EventArgs.cs" />
     <Compile Include="Models\FileCollectionReference.cs" />
-    <Compile Include="UIDialog.cs" />
     <Compile Include="MainViewController.cs" />
     <Compile Include="MainViewController.designer.cs">
       <DependentUpon>MainViewController.cs</DependentUpon>
@@ -139,18 +139,22 @@
     <Compile Include="MainWindowController.designer.cs">
       <DependentUpon>MainWindowController.cs</DependentUpon>
     </Compile>
-    <Compile Include="NSMenuSegmentedCell.cs" />
-    <Compile Include="Models\SessionData.cs" />
-    <Compile Include="DbNavigationViewController.cs" />
-    <Compile Include="DbNavigationViewController.designer.cs">
-      <DependentUpon>DbNavigationViewController.cs</DependentUpon>
-    </Compile>
+    <Compile Include="DbNavViewController.cs" />
     <Compile Include="ListCollectionViewController.cs" />
     <Compile Include="ListCollectionViewController.designer.cs">
       <DependentUpon>ListCollectionViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Extensions\LinqExtensions.cs" />
     <Compile Include="Converters\BsonValueToStringConverter.cs" />
+    <Compile Include="DbNavOutlineView.cs" />
+    <Compile Include="DbNavViewController.designer.cs">
+      <DependentUpon>DbNavViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DbNavOutlineDelegate.cs" />
+    <Compile Include="Models\ElementNodeEventArgs.cs" />
+    <Compile Include="SessionData.cs" />
+    <Compile Include="NSPresentation\NSMenuSegmentedCell.cs" />
+    <Compile Include="NSPresentation\UIDialog.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Main.storyboard" />

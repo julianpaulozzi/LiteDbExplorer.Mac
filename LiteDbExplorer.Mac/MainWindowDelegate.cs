@@ -40,31 +40,34 @@ namespace LiteDbExplorer.Mac
                 // Take action based on result
                 switch (result) {
                     case 1000:
-                        
+
                         // Already saved?
-                        if (Window.RepresentedUrl != null) {
+                        if (Window.RepresentedUrl != null)
+                        {
                             var path = Window.RepresentedUrl.Path;
 
                             // Save changes to file
                             // File.WriteAllText (path, viewController.Text);
                             return true;
-                        } else {
-                            var dlg = new NSSavePanel ();
-                            dlg.Title = "Save Document";
-                            dlg.BeginSheet (Window, (rslt) => {
-                                // File selected?
-                                if (rslt == 1) {
-                                    var path = dlg.Url.Path;
-                                    // File.WriteAllText (path, viewController.Text);
-                                    Window.DocumentEdited = false;
-                                    viewController.View.Window.SetTitleWithRepresentedFilename (Path.GetFileName(path));
-                                    viewController.View.Window.RepresentedUrl = dlg.Url;
-                                    Window.Close();
-                                }
-                            });
-                            return true;
                         }
-                        return false;
+                        var dlg = new NSSavePanel
+                        {
+                            Title = "Save Document"
+                        };
+                        dlg.BeginSheet(Window, (rslt) =>
+                        {
+                            // File selected?
+                            if (rslt == 1)
+                            {
+                                var path = dlg.Url.Path;
+                                // File.WriteAllText (path, viewController.Text);
+                                Window.DocumentEdited = false;
+                                viewController.View.Window.SetTitleWithRepresentedFilename(Path.GetFileName(path));
+                                viewController.View.Window.RepresentedUrl = dlg.Url;
+                                Window.Close();
+                            }
+                        });
+                        return true;
                     case 1001:
                         // Lose Changes
                         return true;

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using LiteDbExplorer.Mac.Extensions;
+using LiteDbExplorer.Mac.Models;
 
-namespace LiteDbExplorer.Mac.Models
+namespace LiteDbExplorer.Mac
 {
     public class SessionData
     {
@@ -49,6 +49,34 @@ namespace LiteDbExplorer.Mac.Models
             Databases.Add(databaseReference);
         }
 
+        public void CloseDatabase(string instanceId)
+        {
+            var databaseReference = GetDatabaseReference(instanceId);
+            CloseDatabase(databaseReference);
+        }
+
+        public void CloseDatabase(DatabaseReference databaseReference)
+        {
+            if(databaseReference == null)
+            {
+                return;
+            }
+
+            if (SelectedCollection?.Database == databaseReference)
+            {
+                SelectedCollection = null;
+            }
+
+            if (SelectedDatabase == databaseReference)
+            {
+                SelectedDatabase = null;
+            }
+
+            Databases.Remove(databaseReference);
+
+            databaseReference?.Dispose();
+        }
+
         public void CloseDatabases()
         {
             SelectedCollection = null;
@@ -62,7 +90,20 @@ namespace LiteDbExplorer.Mac.Models
             Databases = new ObservableCollection<DatabaseReference>();
         }
 
-        public bool HasDatabaseReference(string path)
+        public DatabaseReference GetDatabaseReference(string instanceId)
+        {
+            var dbReference = Databases.FirstOrDefault(p => p.InstanceId.Equals(instanceId));
+            if(dbReference != null)
+            {
+                return dbReference;
+            }
+
+            return Databases.FirstOrDefault(
+                p => p.Collections.Any(c => c.InstanceId.Equals(instanceId))
+            );
+        }
+
+        public bool IsDatabaseOpen(string path)
         {
             return Databases.FirstOrDefault(a => a.Location == path) != null;
         }

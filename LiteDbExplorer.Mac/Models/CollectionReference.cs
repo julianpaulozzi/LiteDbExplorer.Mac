@@ -3,50 +3,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using Foundation;
 using JetBrains.Annotations;
 using LiteDB;
 
 namespace LiteDbExplorer.Mac.Models
 {
-    [Register(nameof(CollectionReferenceVM))]
-    public class CollectionReferenceVM : NSObject
-    {
-        private DatabaseReferenceVM _database;
-        private string _name;
-
-        private string _instanceId;
-        [Export(nameof(InstanceId))]
-        public string InstanceId
-        {
-            get => _instanceId;
-        }
-
-        [Export(nameof(Name))]
-        public string Name
-        {
-            get => _name;
-            set
-            {
-                WillChangeValue(nameof(Name));
-                _name = value;
-                DidChangeValue(nameof(Name));
-            }
-        }
-
-        [Export(nameof(Database))]
-        public DatabaseReferenceVM Database
-        {
-            get => _database;
-            set
-            {
-                WillChangeValue(nameof(Database));
-                _database = value;
-                DidChangeValue(nameof(Database));
-            }
-        }
-    }
-
     public class CollectionReference : INotifyPropertyChanging, INotifyPropertyChanged
     {
         private ObservableCollection<DocumentReference> _items;

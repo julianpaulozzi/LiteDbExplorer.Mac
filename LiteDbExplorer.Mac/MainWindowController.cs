@@ -118,7 +118,7 @@ namespace LiteDbExplorer.Mac
         public bool HandleOpenDatabase(NSUrl url)
         {
             var path = url.Path;
-            if (SessionData.Current.HasDatabaseReference(path))
+            if (SessionData.Current.IsDatabaseOpen(path))
             {
                 return false;
             }

@@ -401,7 +401,7 @@
                 <windowController showSeguePresentationStyle="single" id="B8D-0N-5wS" customClass="MainWindowController" sceneMemberID="viewController">
                     <window key="window" title="LiteDb Explorer" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" titleVisibility="hidden" id="IQv-IB-iLA">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" fullSizeContentView="YES"/>
-                        <rect key="contentRect" x="201" y="400" width="713" height="400"/>
+                        <rect key="contentRect" x="201" y="400" width="613" height="400"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
                         <value key="minSize" type="size" width="600" height="400"/>
                         <toolbar key="toolbar" implicitIdentifier="EA37C4E6-7818-43AE-8065-AC640857D7D9" centeredItem="B1W-o7-C8c" displayMode="iconOnly" sizeMode="regular" id="hvR-f7-HJg">
@@ -487,7 +487,7 @@
                 <customObject id="Oky-zY-oP4" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
                 <userDefaultsController representsSharedInstance="YES" id="QHB-0w-Zyy"/>
             </objects>
-            <point key="canvasLocation" x="137.5" y="362"/>
+            <point key="canvasLocation" x="82" y="306"/>
         </scene>
         <!--Main View Controller-->
         <scene sceneID="hIz-AP-VOD">
@@ -544,7 +544,7 @@
         <!--Nav View Controller-->
         <scene sceneID="NBr-MU-iy5">
             <objects>
-                <viewController title="Nav View Controller" id="UeX-Qd-qfh" customClass="DbNavigationViewController" sceneMemberID="viewController">
+                <viewController title="Nav View Controller" id="UeX-Qd-qfh" customClass="DbNavViewController" sceneMemberID="viewController">
                     <view key="view" id="thX-a1-pv3">
                         <rect key="frame" x="0.0" y="0.0" width="265" height="297"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -555,7 +555,7 @@
                                     <rect key="frame" x="1" y="1" width="263" height="295"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" rowSizeStyle="medium" viewBased="YES" indentationPerLevel="18" autoresizesOutlineColumn="YES" outlineTableColumn="q2c-da-JJJ" id="2du-ZH-GQo">
+                                        <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" rowSizeStyle="medium" viewBased="YES" indentationPerLevel="18" autoresizesOutlineColumn="YES" outlineTableColumn="q2c-da-JJJ" id="2du-ZH-GQo" customClass="DbNavOutlineView">
                                             <rect key="frame" x="0.0" y="0.0" width="263" height="295"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <size key="intercellSpacing" width="3" height="2"/>
@@ -634,6 +634,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="dbNavMenu" destination="Ggk-e6-oqg" id="2Gh-qI-a4M"/>
                         <outlet property="dbNavOutlineView" destination="2du-ZH-GQo" id="Ydj-Sw-2iK"/>
                     </connections>
                 </viewController>
@@ -647,8 +648,29 @@
                         <binding destination="UeX-Qd-qfh" name="contentArray" keyPath="self.Databases" id="eaU-jg-DXk"/>
                     </connections>
                 </treeController>
+                <menu title="DbNavMenu" id="Ggk-e6-oqg">
+                    <items>
+                        <menuItem title="Add File..." id="HqH-3p-4nk">
+                            <modifierMask key="keyEquivalentModifierMask"/>
+                        </menuItem>
+                        <menuItem title="Add Collection..." tag="1" id="SK8-CG-bHK">
+                            <modifierMask key="keyEquivalentModifierMask"/>
+                        </menuItem>
+                        <menuItem isSeparatorItem="YES" id="NNN-nT-RMH"/>
+                        <menuItem title="Refresh Database" tag="2" id="0tH-V6-LkV">
+                            <modifierMask key="keyEquivalentModifierMask"/>
+                        </menuItem>
+                        <menuItem title="Database properties..." tag="3" id="xC0-He-tu3">
+                            <modifierMask key="keyEquivalentModifierMask"/>
+                        </menuItem>
+                        <menuItem isSeparatorItem="YES" id="b4c-Qq-WuY"/>
+                        <menuItem title="Close Database" tag="4" id="1TB-JH-tLp">
+                            <modifierMask key="keyEquivalentModifierMask"/>
+                        </menuItem>
+                    </items>
+                </menu>
             </objects>
-            <point key="canvasLocation" x="653.5" y="990.5"/>
+            <point key="canvasLocation" x="571" y="1271"/>
         </scene>
         <!--Right View Controller-->
         <scene sceneID="Bwe-kj-gMH">
@@ -658,13 +680,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <scrollView autohidesScrollers="YES" horizontalLineScroll="26" horizontalPageScroll="10" verticalLineScroll="26" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="slR-8X-W15">
+                            <scrollView autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="slR-8X-W15">
                                 <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
                                 <clipView key="contentView" id="rbE-Ja-Y05">
                                     <rect key="frame" x="1" y="0.0" width="448" height="299"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" rowSizeStyle="medium" headerView="h1i-cR-vVi" id="ccC-Df-cEG">
+                                        <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="22" rowSizeStyle="small" headerView="h1i-cR-vVi" id="ccC-Df-cEG">
                                             <rect key="frame" x="0.0" y="0.0" width="448" height="274"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <size key="intercellSpacing" width="3" height="2"/>
@@ -695,12 +717,34 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="listCollectionMenu" destination="nvw-HP-Nq9" id="HDa-Qa-xu0"/>
                         <outlet property="listCollectionTable" destination="ccC-Df-cEG" id="Oe0-9S-C2Z"/>
                     </connections>
                 </viewController>
                 <customObject id="dFb-Fu-Vgh" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+                <menu title="Collection Menu" id="nvw-HP-Nq9">
+                    <items>
+                        <menuItem title="Add" keyEquivalent="n" id="wH6-hh-ZEd"/>
+                        <menuItem title="Edit" id="BDA-AI-rkL">
+                            <string key="keyEquivalent" base64-UTF8="YES">
+DQ
+</string>
+                            <modifierMask key="keyEquivalentModifierMask"/>
+                        </menuItem>
+                        <menuItem title="Remove" id="rNl-NH-Jpd">
+                            <string key="keyEquivalent" base64-UTF8="YES">
+CA
+</string>
+                        </menuItem>
+                        <menuItem isSeparatorItem="YES" id="tpQ-Ot-bET"/>
+                        <menuItem title="Copy" keyEquivalent="c" id="Of1-dy-n7v"/>
+                        <menuItem title="Paste" keyEquivalent="v" id="wKk-xG-S8N"/>
+                        <menuItem isSeparatorItem="YES" id="V9V-i0-Wfo"/>
+                        <menuItem title="Export as..." keyEquivalent="S" id="Apc-xs-PjS"/>
+                    </items>
+                </menu>
             </objects>
-            <point key="canvasLocation" x="746" y="1379"/>
+            <point key="canvasLocation" x="663" y="1848"/>
         </scene>
     </scenes>
     <resources>
